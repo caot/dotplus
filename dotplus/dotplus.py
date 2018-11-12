@@ -17,7 +17,7 @@ class Credentials:
 
 class UrlFactory:
     @classmethod
-    def time_cards(cls, url: str, start_date: date, end_date: date) -> str:
+    def time_cards(cls, url, start_date, end_date):
         start_date = start_date.strftime('%Y-%m-%d')
         end_date = end_date.strftime('%Y-%m-%d')
 
@@ -28,7 +28,7 @@ class InvalidCredentialsError(Exception):
     pass
 
 
-def time_cards(start_date: date, end_date: date) -> [dict]:
+def time_cards(start_date, end_date):
     config = resolve_config()
     credentials = _login(config)
     return _time_cards(credentials, start_date, end_date)
@@ -38,7 +38,7 @@ def resolve_config():
     return read_config(os.path.join(Path.home(), '.dotplusrc'))
 
 
-def _login(config: Config) -> Credentials:
+def _login(config):
     credentials = {'login': config.email, 'password': config.password}
     headers = {'api-version': '2', 'content-type': 'application/json;charset=UTF-8'}
 
@@ -53,7 +53,7 @@ def _login(config: Config) -> Credentials:
         raise InvalidCredentialsError
 
 
-def _time_cards(credentials: Credentials, start_date: date, end_date: date) -> [dict]:
+def _time_cards(credentials, start_date, end_date):
     url = UrlFactory.time_cards(credentials.config.time_cards_url, start_date, end_date)
 
     headers = {
